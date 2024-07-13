@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Words Extractor</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+            color: #003544
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        p {
+            margin: -20px 0 20px 0;
+        }
+
+        textarea {
+            background: #f5f5f5;
+            border: #999 solid 1px;
+            border-radius: 20px;
+            padding: 10px 15px;
+            width: 90%;
+        }
+
+        textarea:focus-visible,
+        textarea:active {
+            background: #fff;
+            border: #00adff solid 1px;
+        }
+
+        button {
+            background: #e2f6ff;
+            border: #00adff solid 1px;
+            border-radius: 20px;
+            padding: 10px 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Words Extractor</h1>
+    <p>built by <a href="https://muathye.com">muathye.com</a></p>
+    <div>
+        <textarea id="textInput" rows="10" cols="50" placeholder="Enter your text here..."></textarea><br>
+    </div>
+    <button onclick="displayUniqueWords()">Extract Unique Words</button>
+
+    <h2>Unique Words:</h2>
+    <ul id="uniqueWordsList"></ul>
+
+    <script>
+        function extractUniqueWords(text) {
+            // Split the text into words, removing punctuation and converting to lowercase
+            const words = text
+                .replace(/[^\w\s]/gi, '')  // Remove punctuation
+                .toLowerCase()             // Convert to lowercase
+                .split(/\s+/);             // Split by whitespace
+
+            // Use a Set to store unique words
+            const uniqueWords = new Set(words);
+
+            // Convert the Set back to an array
+            return Array.from(uniqueWords);
+        }
+
+        function displayUniqueWords() {
+            const textInput = document.getElementById('textInput').value;
+            const uniqueWords = extractUniqueWords(textInput);
+            const sortedUniqueWords = uniqueWords.sort();
+
+            const uniqueWordsList = document.getElementById('uniqueWordsList');
+            uniqueWordsList.innerHTML = '';
+
+            sortedUniqueWords.forEach(word => {
+                const listItem = document.createElement('li');
+                listItem.textContent = word;
+                uniqueWordsList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+
+</html>
