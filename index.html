@@ -42,15 +42,19 @@
             border: #00adff solid 1px;
             border-radius: 20px;
             padding: 10px 15px;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
     <h1>Words Extractor</h1>
-    <p>built by <a href="https://muathye.com">muathye.com</a></p>
+    <p>Powered by <a href="https://muathye.com">muathye.com</a></p>
     <div>
         <textarea id="textInput" rows="10" cols="50" placeholder="Enter your text here..."></textarea><br>
+        <label>
+            <input type="checkbox" id="sortByReputation"> Sort by reputation
+        </label>
     </div>
     <button onclick="displayUniqueWords()">Extract Unique Words</button>
 
@@ -58,31 +62,46 @@
     <ul id="uniqueWordsList"></ul>
 
     <script>
-        function extractUniqueWords(text) {
+        function extractUniqueWordsWithReputation(text) {
             // Split the text into words, removing punctuation and converting to lowercase
             const words = text
                 .replace(/[^\w\s]/gi, '')  // Remove punctuation
                 .toLowerCase()             // Convert to lowercase
                 .split(/\s+/);             // Split by whitespace
 
-            // Use a Set to store unique words
-            const uniqueWords = new Set(words);
+            // Count the occurrences of each word
+            const wordCounts = {};
+            words.forEach(word => {
+                if (word) {
+                    wordCounts[word] = (wordCounts[word] || 0) + 1;
+                }
+            });
 
-            // Convert the Set back to an array
-            return Array.from(uniqueWords);
+            // Convert to an array of [word, count] pairs
+            return Object.entries(wordCounts);
         }
 
         function displayUniqueWords() {
             const textInput = document.getElementById('textInput').value;
-            const uniqueWords = extractUniqueWords(textInput);
-            const sortedUniqueWords = uniqueWords.sort();
+            const sortByReputation = document.getElementById('sortByReputation').checked;
+            const uniqueWordsWithReputation = extractUniqueWordsWithReputation(textInput);
+
+            let sortedWords;
+
+            if (sortByReputation) {
+                // Sort by reputation (frequency), descending
+                sortedWords = uniqueWordsWithReputation.sort((a, b) => b[1] - a[1]);
+            } else {
+                // Sort alphabetically by the word itself
+                sortedWords = uniqueWordsWithReputation.sort((a, b) => a[0].localeCompare(b[0]));
+            }
 
             const uniqueWordsList = document.getElementById('uniqueWordsList');
             uniqueWordsList.innerHTML = '';
 
-            sortedUniqueWords.forEach(word => {
+            sortedWords.forEach(([word, count]) => {
                 const listItem = document.createElement('li');
-                listItem.textContent = word;
+                listItem.textContent = `${word} (${count})`;
                 uniqueWordsList.appendChild(listItem);
             });
         }
