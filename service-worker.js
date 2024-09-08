@@ -1,4 +1,4 @@
-const CACHE_NAME = 'words-extractor-cache-v1';
+const CACHE_NAME = 'words-extractor-cache-v4';
 const urlsToCache = [
     './',
     './index.html',
