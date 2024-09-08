@@ -57,6 +57,9 @@
         <label>
             <input type="checkbox" id="sortByReputation"> Sort by reputation
         </label>
+        <label>
+            <input type="checkbox" id="excludeNumbers"> Exclude numbers
+        </label>
     </div>
     <button onclick="displayUniqueWords()">Extract Unique Words</button>
 
@@ -64,12 +67,17 @@
     <ul id="uniqueWordsList"></ul>
 
     <script>
-        function extractUniqueWordsWithReputation(text) {
+        function extractUniqueWordsWithReputation(text, excludeNumbers) {
             // Split the text into words, removing punctuation and converting to lowercase
-            const words = text
+            let words = text
                 .replace(/[^\w\s]/gi, '')  // Remove punctuation
                 .toLowerCase()             // Convert to lowercase
                 .split(/\s+/);             // Split by whitespace
+
+            // Remove numbers if the checkbox is checked
+            if (excludeNumbers) {
+                words = words.filter(word => isNaN(word));
+            }
 
             // Count the occurrences of each word
             const wordCounts = {};
@@ -86,7 +94,8 @@
         function displayUniqueWords() {
             const textInput = document.getElementById('textInput').value;
             const sortByReputation = document.getElementById('sortByReputation').checked;
-            const uniqueWordsWithReputation = extractUniqueWordsWithReputation(textInput);
+            const excludeNumbers = document.getElementById('excludeNumbers').checked;
+            const uniqueWordsWithReputation = extractUniqueWordsWithReputation(textInput, excludeNumbers);
 
             let sortedWords;
 
@@ -106,7 +115,7 @@
                 listItem.textContent = `${word} (${count})`;
                 uniqueWordsList.appendChild(listItem);
             });
-        }
+        } 
     </script>
     <script>
     if ('serviceWorker' in navigator) {
