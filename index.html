@@ -53,7 +53,12 @@
     <h1>Words Extractor</h1>
     <p>Powered by <a href="https://muathye.com">muathye.com</a></p>
     <div>
-        <textarea id="textInput" rows="10" cols="50" placeholder="Enter your text here..."></textarea><br>
+        <!-- Original Text Textarea -->
+        <textarea id="originalTextInput" rows="5" cols="50" placeholder="Enter the text here to exclude it..."></textarea><br>
+
+        <!-- New Text Textarea -->
+        <textarea id="textInput" rows="10" cols="50" placeholder="Enter your new text here..."></textarea><br>
+
         <label>
             <input type="checkbox" id="sortByReputation"> Sort by reputation
         </label>
@@ -92,10 +97,18 @@
         }
 
         function displayUniqueWords() {
+            const originalTextInput = document.getElementById('originalTextInput').value;
             const textInput = document.getElementById('textInput').value;
             const sortByReputation = document.getElementById('sortByReputation').checked;
             const excludeNumbers = document.getElementById('excludeNumbers').checked;
-            const uniqueWordsWithReputation = extractUniqueWordsWithReputation(textInput, excludeNumbers);
+
+            // Extract words from original and new texts
+            const originalWordsWithReputation = extractUniqueWordsWithReputation(originalTextInput, excludeNumbers);
+            const newWordsWithReputation = extractUniqueWordsWithReputation(textInput, excludeNumbers);
+
+            // Get unique words that are not in the original text
+            const originalWords = originalWordsWithReputation.map(([word]) => word);
+            let uniqueWordsWithReputation = newWordsWithReputation.filter(([word]) => !originalWords.includes(word));
 
             let sortedWords;
 
