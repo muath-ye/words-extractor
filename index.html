@@ -6,135 +6,245 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <title>Words Extractor</title>
     <style>
+        /* Global styles */
         body {
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f5f5f5;
-            color: #003544;
-            font-family: 'Changa', sans-serif;
+            justify-content: center;
+            background-color: #f7f8fa;
+            font-family: 'Inter', sans-serif;
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         h1 {
-            text-align: center;
+            font-size: 2.5rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         p {
-            margin: -20px 0 20px 0;
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
         }
 
-        textarea {
-            background: #f5f5f5;
-            border: #999 solid 1px;
-            border-radius: 20px;
-            padding: 10px 15px;
-            width: 90%;
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        textarea:focus-visible,
-        textarea:active {
-            background: #fff;
-            border: #00adff solid 1px;
+        a:hover {
+            text-decoration: underline;
         }
 
-        button {
-            background: #e2f6ff;
-            border: #00adff solid 1px;
-            border-radius: 20px;
-            padding: 10px 15px;
+        /* Main container */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Form styles */
+        .textarea-group {
+            margin-bottom: 20px;
+        }
+
+        .textarea-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: #34495e;
+        }
+
+        .textarea-group textarea {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: border 0.3s ease, background-color 0.3s ease;
+        }
+
+        .textarea-group textarea:focus {
+            border-color: #3498db;
+            background-color: #fff;
+            outline: none;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .options label {
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .options input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            text-align: center;
         }
 
-
-        button.copy-button {
-            padding: 6px 4px;
-            border-radius: 2px;
-            background-color: #f5f5f5;
+        .btn:hover {
+            background-color: #2980b9;
         }
 
-        button.copy-button:hover,
-        button:hover {
-            background-color: #cdeaf7;
-        }
-
+        /* Output box */
         .output-box {
-            background: #fff;
-            border-radius: 12px;
+            background-color: #ecf0f1;
             padding: 20px;
-            width: 80%;
+            border-radius: 8px;
             margin-top: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
+            display: none;
+            /* Hidden by default */
+        }
+
+        .output-box h2 {
+            font-size: 1.5rem;
+            color: #34495e;
         }
 
         .output-box ul {
             list-style: none;
             padding-left: 0;
+            font-size: 1rem;
         }
 
         .output-box li {
-            margin: 5px 0;
-            padding: 8px;
-            border-bottom: 1px solid #eaeaea;
-        }
-
-        .output-box li:last-child {
-            border-bottom: none;
-        }
-
-        button.copy-button {
-            display: flex;
-            align-items: center;
-        }
-
-        svg {
-            padding: 0 3px 0 0;
-            height: 16px;
-        }
-
-        .output-header {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid #e0e0e0;
         }
 
-        .output-header h2 {
-            margin: 0;
+        .output-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Copy button */
+        .copy-btn {
+            background-color: transparent;
+            border: none;
+            color: #3498db;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .copy-btn svg {
+            margin-right: 5px;
+        }
+
+        .copy-btn:hover {
+            color: #2980b9;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .btn {
+                font-size: 0.9rem;
+            }
+
+            .textarea-group textarea {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 
 <body>
+
     <h1>Words Extractor</h1>
     <p>Powered by <a href="https://muathye.com">muathye.com</a></p>
-    <div>
-        <!-- Original Text Textarea -->
-        <textarea id="originalTextInput" rows="5" cols="50" placeholder="Enter the text here to exclude it..."></textarea><br>
 
-        <!-- New Text Textarea -->
-        <textarea id="textInput" rows="10" cols="50" placeholder="Enter your new text here..."></textarea><br>
+    <div class="container">
+        <!-- Form Section -->
+        <div class="textarea-group">
+            <label for="originalTextInput">Text to exclude:</label>
+            <textarea id="originalTextInput" placeholder="Enter the text to exclude..."></textarea>
+        </div>
 
-        <label>
-            <input type="checkbox" id="sortByReputation"> Sort by reputation
-        </label>
-        <label>
-            <input type="checkbox" id="excludeNumbers"> Exclude numbers
-        </label>
+        <div class="textarea-group">
+            <label for="textInput">New text to extract unique words from:</label>
+            <textarea id="textInput" placeholder="Enter new text..."></textarea>
+        </div>
+
+        <!-- Options -->
+        <div class="options">
+            <label>
+                <input type="checkbox" id="sortByReputation"> Sort by reputation
+            </label>
+            <label>
+                <input type="checkbox" id="excludeNumbers"> Exclude numbers
+            </label>
+        </div>
+
+        <!-- Extract Button -->
+        <button class="btn" onclick="displayUniqueWords()">Extract Unique Words</button>
     </div>
-    <button onclick="displayUniqueWords()">Extract Unique Words</button>
 
-    <!-- Modern Output Box -->
-    <div class="output-box" id="outputBox">
-        <div class="output-header">
-            <h2>Unique Words:</h2>
-            <button class="copy-button" onclick="copyToClipboard()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path>
+    <!-- Output Section -->
+    <div class="container output-box" id="outputBox">
+        <div class="title">
+            <h2>Unique Words</h2>
+            <button class="copy-btn" onclick="copyToClipboard()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z"
+                        fill="currentColor"></path>
                 </svg>
+                Copy to Clipboard
             </button>
         </div>
         <ul id="uniqueWordsList"></ul>
@@ -142,90 +252,46 @@
 
     <script>
         function extractUniqueWordsWithReputation(text, excludeNumbers) {
-            // Split the text into words, removing punctuation and converting to lowercase
-            let words = text
-                .replace(/[^\w\s]/gi, '')  // Remove punctuation
-                .toLowerCase()             // Convert to lowercase
-                .split(/\s+/);             // Split by whitespace
-
-            // Remove numbers if the checkbox is checked
+            let words = text.replace(/[^\w\s]/gi, '').toLowerCase().split(/\s+/);
             if (excludeNumbers) {
                 words = words.filter(word => isNaN(word));
             }
-            // Count the occurrences of each word
             const wordCounts = {};
             words.forEach(word => {
-                if (word) {
-                    wordCounts[word] = (wordCounts[word] || 0) + 1;
-                }
+                if (word) wordCounts[word] = (wordCounts[word] || 0) + 1;
             });
-
-            // Convert to an array of [word, count] pairs
             return Object.entries(wordCounts);
         }
 
         function displayUniqueWords() {
-            const originalTextInput = document.getElementById('originalTextInput').value;
-            const textInput = document.getElementById('textInput').value;
+            const originalText = document.getElementById('originalTextInput').value;
+            const newText = document.getElementById('textInput').value;
             const sortByReputation = document.getElementById('sortByReputation').checked;
             const excludeNumbers = document.getElementById('excludeNumbers').checked;
 
-            // Extract words from original and new texts
-            const originalWordsWithReputation = extractUniqueWordsWithReputation(originalTextInput, excludeNumbers);
-            const newWordsWithReputation = extractUniqueWordsWithReputation(textInput, excludeNumbers);
+            const originalWords = new Set(originalText.replace(/[^\w\s]/gi, '').toLowerCase().split(/\s+/));
+            let uniqueWords = extractUniqueWordsWithReputation(newText, excludeNumbers).filter(([word]) => !originalWords.has(word));
 
-            // Get unique words that are not in the original text
-            const originalWords = originalWordsWithReputation.map(([word]) => word);
-            let uniqueWordsWithReputation = newWordsWithReputation.filter(([word]) => !originalWords.includes(word));
-
-            let sortedWords;
-
-            if (sortByReputation) {
-                // Sort by reputation (frequency), descending
-                sortedWords = uniqueWordsWithReputation.sort((a, b) => b[1] - a[1]);
-            } else {
-                // Sort alphabetically by the word itself
-                sortedWords = uniqueWordsWithReputation.sort((a, b) => a[0].localeCompare(b[0]));
-            }
+            if (sortByReputation) uniqueWords.sort((a, b) => b[1] - a[1]);
 
             const uniqueWordsList = document.getElementById('uniqueWordsList');
-            uniqueWordsList.innerHTML = '';
+            uniqueWordsList.innerHTML = uniqueWords.map(([word, count]) => `<li>${word} <span>${count}</span></li>`).join('');
 
-            sortedWords.forEach(([word, count]) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${word} (${count})`;
-                uniqueWordsList.appendChild(listItem);
-            });
+            // Show the output section
+            document.getElementById('outputBox').style.display = 'block';
         }
 
         function copyToClipboard() {
-            const uniqueWordsList = document.getElementById('uniqueWordsList');
-            const textToCopy = Array.from(uniqueWordsList.querySelectorAll('li'))
-                .map(li => li.textContent)
-                .join('\n');
-
-            const textArea = document.createElement('textarea');
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-
-            alert('Copied to clipboard');
+            const listItems = document.querySelectorAll('#uniqueWordsList li');
+            const text = Array.from(listItems).map(item => item.textContent).join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
         }
     </script>
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(registration => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        }
-    </script>
 </body>
 
 </html>
