@@ -14,7 +14,8 @@
             flex-direction: column;
             align-items: center;
             background-color: #f5f5f5;
-            color: #003544
+            color: #003544;
+            font-family: 'Changa', sans-serif;
         }
 
         h1 {
@@ -45,6 +46,64 @@
             border-radius: 20px;
             padding: 10px 15px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+
+        button.copy-button {
+            padding: 6px 4px;
+            border-radius: 2px;
+            background-color: #f5f5f5;
+        }
+
+        button.copy-button:hover,
+        button:hover {
+            background-color: #cdeaf7;
+        }
+
+        .output-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            width: 80%;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .output-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .output-box li {
+            margin: 5px 0;
+            padding: 8px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .output-box li:last-child {
+            border-bottom: none;
+        }
+
+        button.copy-button {
+            display: flex;
+            align-items: center;
+        }
+
+        svg {
+            padding: 0 3px 0 0;
+            height: 16px;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .output-header h2 {
+            margin: 0;
         }
     </style>
 </head>
@@ -68,8 +127,18 @@
     </div>
     <button onclick="displayUniqueWords()">Extract Unique Words</button>
 
-    <h2>Unique Words:</h2>
-    <ul id="uniqueWordsList"></ul>
+    <!-- Modern Output Box -->
+    <div class="output-box" id="outputBox">
+        <div class="output-header">
+            <h2>Unique Words:</h2>
+            <button class="copy-button" onclick="copyToClipboard()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path>
+                </svg>
+            </button>
+        </div>
+        <ul id="uniqueWordsList"></ul>
+    </div>
 
     <script>
         function extractUniqueWordsWithReputation(text, excludeNumbers) {
@@ -83,7 +152,6 @@
             if (excludeNumbers) {
                 words = words.filter(word => isNaN(word));
             }
-
             // Count the occurrences of each word
             const wordCounts = {};
             words.forEach(word => {
@@ -128,17 +196,34 @@
                 listItem.textContent = `${word} (${count})`;
                 uniqueWordsList.appendChild(listItem);
             });
-        } 
+        }
+
+        function copyToClipboard() {
+            const uniqueWordsList = document.getElementById('uniqueWordsList');
+            const textToCopy = Array.from(uniqueWordsList.querySelectorAll('li'))
+                .map(li => li.textContent)
+                .join('\n');
+
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            alert('Copied to clipboard');
+        }
     </script>
+
     <script>
-    if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
-            .then(registration => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(error => {
-                console.log('Service Worker registration failed:', error);
-            });
+                .then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
         }
     </script>
 </body>
